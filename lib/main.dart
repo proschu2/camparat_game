@@ -4,6 +4,6 @@ import 'package:camparat_game/camparat_game.dart';
 
 void main() {
   runApp(
-    GameWidget(game: TRexGame()),
+    GameWidget(game: CamparatGame()),
   );
 }

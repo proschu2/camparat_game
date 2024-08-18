@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:camparat_game/camparat_game.dart';
+import 'package:flutter/material.dart';
 
 class GameOverPanel extends Component {
   bool visible = false;
@@ -20,27 +21,39 @@ class GameOverPanel extends Component {
   }
 }
 
-class GameOverText extends SpriteComponent with HasGameReference<TRexGame> {
-  GameOverText() : super(size: Vector2(382, 25), anchor: Anchor.center);
-
+class GameOverText extends Component with HasGameReference<CamparatGame> {
   @override
   Future<void> onLoad() async {
-    sprite = Sprite(
-      game.spriteImage,
-      srcPosition: Vector2(955.0, 26.0),
-      srcSize: size,
+    // Define the text style
+
+    final textPaint = TextPaint(
+        style: const TextStyle(
+      fontFamily: 'PPGatwick',
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontSize: 48,
+    ));
+
+    // Create the TextComponent
+    final gameOverText = TextComponent(
+      text: 'GAME OVER',
+      textRenderer: textPaint,
+      anchor: Anchor.center,
+      position: Vector2(game.size.x / 2, game.size.y * 0.25),
     );
+
+    // Add the TextComponent to the GameOverText component
+    add(gameOverText);
   }
 
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    x = size.x / 2;
-    y = size.y * 0.25;
   }
 }
 
-class GameOverRestart extends SpriteComponent with HasGameReference<TRexGame> {
+class GameOverRestart extends SpriteComponent
+    with HasGameReference<CamparatGame> {
   GameOverRestart() : super(size: Vector2(72, 64), anchor: Anchor.center);
 
   @override
@@ -56,6 +69,6 @@ class GameOverRestart extends SpriteComponent with HasGameReference<TRexGame> {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     x = size.x / 2;
-    y = size.y * 0.75;
+    position = Vector2(size.x / 2, size.y * 0.75);
   }
 }

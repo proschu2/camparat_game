@@ -5,7 +5,7 @@ import 'package:camparat_game/camparat_game.dart';
 enum PlayerState { crashed, jumping, running, waiting }
 
 class Player extends SpriteAnimationGroupComponent<PlayerState>
-    with HasGameReference<TRexGame>, CollisionCallbacks {
+    with HasGameReference<CamparatGame>, CollisionCallbacks {
   Player() : super(size: Vector2(90, 88));
 
   final double gravity = 1;
@@ -38,24 +38,15 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
         parentSize: size,
       ),
     );
+
+    final singleAnimation =
+        _getAnimation(size: Vector2(88, 90), frames: [Vector2(0, 0)]);
+
     animations = {
-      PlayerState.running: _getAnimation(
-        size: Vector2(88.0, 90.0),
-        frames: [Vector2(1514.0, 4.0), Vector2(1602.0, 4.0)],
-        stepTime: 0.2,
-      ),
-      PlayerState.waiting: _getAnimation(
-        size: Vector2(88.0, 90.0),
-        frames: [Vector2(76.0, 6.0)],
-      ),
-      PlayerState.jumping: _getAnimation(
-        size: Vector2(88.0, 90.0),
-        frames: [Vector2(1339.0, 6.0)],
-      ),
-      PlayerState.crashed: _getAnimation(
-        size: Vector2(88.0, 90.0),
-        frames: [Vector2(1782.0, 6.0)],
-      ),
+      PlayerState.running: singleAnimation,
+      PlayerState.waiting: singleAnimation,
+      PlayerState.jumping: singleAnimation,
+      PlayerState.crashed: singleAnimation,
     };
     current = PlayerState.waiting;
   }
@@ -78,6 +69,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
   @override
   void update(double dt) {
     super.update(dt);
+    print('Player update: x=$x, y=$y, current=$current');
     if (current == PlayerState.jumping) {
       y += _jumpVelocity;
       _jumpVelocity += gravity;
@@ -117,7 +109,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
       frames
           .map(
             (vector) => Sprite(
-              game.spriteImage,
+              game.camparatImage,
               srcSize: size,
               srcPosition: vector,
             ),

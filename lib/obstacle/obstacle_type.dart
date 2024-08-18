@@ -92,13 +92,13 @@ class ObstacleTypeSettings {
     return switch (type) {
       ObstacleType.cactusSmall => Sprite(
           spriteImage,
-          srcPosition: Vector2(446.0, 2.0),
-          srcSize: size,
+          srcPosition: Vector2(0, 0),
+          srcSize: Vector2(50, 100),
         ),
       ObstacleType.cactusLarge => Sprite(
           spriteImage,
-          srcPosition: Vector2(652.0, 2.0),
-          srcSize: size,
+          srcPosition: Vector2(0, 0),
+          srcSize: Vector2(50, 100),
         ),
     };
   }

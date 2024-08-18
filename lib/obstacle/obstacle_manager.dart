@@ -6,7 +6,7 @@ import 'package:camparat_game/obstacle/obstacle_type.dart';
 import 'package:camparat_game/random_extension.dart';
 import 'package:camparat_game/camparat_game.dart';
 
-class ObstacleManager extends Component with HasGameReference<TRexGame> {
+class ObstacleManager extends Component with HasGameReference<CamparatGame> {
   ObstacleManager();
 
   ListQueue<ObstacleType> history = ListQueue();

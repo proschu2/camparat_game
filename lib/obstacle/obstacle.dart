@@ -3,7 +3,7 @@ import 'package:camparat_game/obstacle/obstacle_type.dart';
 import 'package:camparat_game/random_extension.dart';
 import 'package:camparat_game/camparat_game.dart';
 
-class Obstacle extends SpriteComponent with HasGameReference<TRexGame> {
+class Obstacle extends SpriteComponent with HasGameReference<CamparatGame> {
   Obstacle({
     required this.settings,
     required this.groupIndex,
@@ -21,7 +21,7 @@ class Obstacle extends SpriteComponent with HasGameReference<TRexGame> {
 
   @override
   Future<void> onLoad() async {
-    sprite = settings.sprite(game.spriteImage);
+    sprite = settings.sprite(game.camparinoImage);
     x = game.size.x + width * groupIndex;
     y = settings.y;
     gap = computeGap(_gapCoefficient, game.currentSpeed);

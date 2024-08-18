@@ -3,7 +3,8 @@ import 'package:camparat_game/background/cloud.dart';
 import 'package:camparat_game/random_extension.dart';
 import 'package:camparat_game/camparat_game.dart';
 
-class CloudManager extends PositionComponent with HasGameReference<TRexGame> {
+class CloudManager extends PositionComponent
+    with HasGameReference<CamparatGame> {
   final double cloudFrequency = 0.5;
   final int maxClouds = 20;
   final double bgCloudSpeed = 0.2;

@@ -4,7 +4,7 @@ import 'package:camparat_game/random_extension.dart';
 import 'package:camparat_game/camparat_game.dart';
 
 class Cloud extends SpriteComponent
-    with ParentIsA<CloudManager>, HasGameReference<TRexGame> {
+    with ParentIsA<CloudManager>, HasGameReference<CamparatGame> {
   Cloud({required Vector2 position})
       : cloudGap = random.fromRange(
           minCloudGap,

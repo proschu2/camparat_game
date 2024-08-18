@@ -14,7 +14,7 @@ import 'package:camparat_game/player.dart';
 
 enum GameState { playing, intro, gameOver }
 
-class TRexGame extends FlameGame
+class CamparatGame extends FlameGame
     with KeyboardEvents, TapCallbacks, HasCollisionDetection {
   static const String description = '''
     A game similar to the game in chrome that you get to play while offline.
@@ -23,6 +23,8 @@ class TRexGame extends FlameGame
   ''';
 
   late final Image spriteImage;
+  late final Image camparatImage;
+  late final Image camparinoImage;
 
   @override
   Color backgroundColor() => const Color(0xFFFFFFFF);
@@ -48,27 +50,25 @@ class TRexGame extends FlameGame
   @override
   Future<void> onLoad() async {
     spriteImage = await Flame.images.load('trex.png');
+    camparatImage = await Flame.images.load('pix_camparat.png');
+    camparinoImage = await Flame.images.load('pix_camparino.png');
+
     add(horizon);
     add(player);
     add(gameOverPanel);
 
-    const chars = '0123456789HI ';
-    final renderer = SpriteFontRenderer.fromFont(
-      SpriteFont(
-        source: spriteImage,
-        size: 23,
-        ascent: 23,
-        glyphs: [
-          for (var i = 0; i < chars.length; i++)
-            Glyph(chars[i], left: 954.0 + 20 * i, top: 0, width: 20),
-        ],
-      ),
-      letterSpacing: 2,
-    );
+    final textPaint = TextPaint(
+        style: const TextStyle(
+      fontFamily: 'PPGatwick',
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontSize: 24,
+    ));
+
     add(
       scoreText = TextComponent(
         position: Vector2(20, 20),
-        textRenderer: renderer,
+        textRenderer: textPaint,
       ),
     );
     score = 0;

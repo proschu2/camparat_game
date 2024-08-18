@@ -7,7 +7,7 @@ import 'package:camparat_game/obstacle/obstacle_manager.dart';
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 
-class Horizon extends PositionComponent with HasGameReference<TRexGame> {
+class Horizon extends PositionComponent with HasGameReference<CamparatGame> {
   Horizon() : super();
 
   static final Vector2 lineSize = Vector2(1200, 24);
