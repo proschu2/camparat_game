@@ -1,0 +1,23 @@
+name: camparat_game
+description: A clone of the classic browser T-Rex game using the Camparat.
+homepage: https://github.com/proschu2/camparat_game
+publish_to: "none"
+
+version: 0.1.0
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  collection: ^1.16.0
+  flame: ^1.18.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.2.0
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
