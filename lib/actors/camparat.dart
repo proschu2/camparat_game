@@ -14,20 +14,19 @@ import 'vial.dart' show Vial;
 
 class CamparatPlayer extends SpriteComponent
     with KeyboardHandler, CollisionCallbacks, HasGameReference<CamparatGame> {
-  int horizontalDirection = 0;
-  final Vector2 velocity = Vector2.zero();
-  final double speed = 200;
-  final Vector2 fromAbove = Vector2(0, -1);
-  bool isOnGround = false;
-  final double gravity = 15;
-  final double jumpSpeed = 600;
-  final double terminalVelocity = 150;
-
-  bool hasJumped = false;
-  bool hitByEnemy = false;
-
   CamparatPlayer({required super.position})
       : super(size: Vector2.all(64), anchor: Anchor.center);
+
+  final Vector2 velocity = Vector2.zero();
+  final Vector2 fromAbove = Vector2(0, -1);
+  final double gravity = 15;
+  final double jumpSpeed = 600;
+  final double moveSpeed = 200;
+  final double terminalVelocity = 150;
+  int horizontalDirection = 0;
+
+  bool isOnGround = false;
+  bool hitByEnemy = false;
 
   @override
   Future<void> onLoad() async {
@@ -38,23 +37,41 @@ class CamparatPlayer extends SpriteComponent
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalDirection = 0;
-    horizontalDirection += keysPressed.contains(LogicalKeyboardKey.arrowLeft) ||
-            (keysPressed.contains(LogicalKeyboardKey.keyA))
+    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyA) ||
+            keysPressed.contains(LogicalKeyboardKey.arrowLeft))
         ? -1
         : 0;
-    horizontalDirection +=
-        keysPressed.contains(LogicalKeyboardKey.arrowRight) ||
-                (keysPressed.contains(LogicalKeyboardKey.keyD))
-            ? 1
-            : 0;
-    hasJumped = keysPressed.contains(LogicalKeyboardKey.space);
+    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyD) ||
+            keysPressed.contains(LogicalKeyboardKey.arrowRight))
+        ? 1
+        : 0;
+    if (keysPressed.contains(LogicalKeyboardKey.space)) {
+      jump();
+    }
     return true;
+  }
+
+  void jump() {
+    if (isOnGround) {
+      velocity.y = -jumpSpeed;
+      isOnGround = false;
+    }
   }
 
   @override
   void update(double dt) {
-    super.update(dt);
-    velocity.x = horizontalDirection * speed;
+    velocity.x = horizontalDirection * moveSpeed;
+    game.objectSpeed = 0;
+
+    if (position.x - 36 <= 0 && horizontalDirection < 0) {
+      velocity.x = 0;
+    }
+
+    if (position.x + 64 >= game.size.x / 2 && horizontalDirection > 0) {
+      velocity.x = 0;
+      game.objectSpeed = -moveSpeed;
+    }
+
     velocity.y += gravity;
 
     if (horizontalDirection < 0 && scale.x > 0) {
@@ -63,28 +80,21 @@ class CamparatPlayer extends SpriteComponent
       flipHorizontally();
     }
 
-    if (hasJumped) {
-      if (isOnGround) {
-        velocity.y = -jumpSpeed;
-        isOnGround = false;
-      }
-      hasJumped = false;
+    if (position.y - size.y / 2 <= 0) {
+      position.y = size.y / 2 + 0.001;
+      velocity.y = jumpSpeed;
     }
     velocity.y = velocity.y.clamp(-jumpSpeed, terminalVelocity);
-    game.objectSpeed = 0;
-    if (position.x - 36 <= 0 && horizontalDirection < 0) {
-      velocity.x = 0;
-    }
 
-    if (position.x + 64 >= game.size.x / 2 && horizontalDirection > 0) {
-      velocity.x = 0;
-      game.objectSpeed = -speed;
-    }
-
-    if (position.y - size.y / 2 <= 0) {
-      position.y = size.y / 2;
-    }
     position += velocity * dt;
+
+    if (position.y > game.size.y + size.y) {
+      game.health = 0;
+    }
+    if (game.health <= 0) {
+      removeFromParent();
+    }
+    super.update(dt);
   }
 
   @override
@@ -113,9 +123,10 @@ class CamparatPlayer extends SpriteComponent
     }
     if (other is Cap) {
       other.removeFromParent();
+      game.capsCollected++;
     }
 
-    if (other is Vial || other is Olives) {
+    if (!hitByEnemy && (other is Vial || other is Olives)) {
       hit();
     }
 
@@ -124,10 +135,11 @@ class CamparatPlayer extends SpriteComponent
 
   void hit() {
     if (!hitByEnemy) {
+      game.health--;
       hitByEnemy = true;
     }
     add(OpacityEffect.fadeOut(
-        EffectController(alternate: true, duration: 0.1, repeatCount: 4))
+        EffectController(alternate: true, duration: 0.5, repeatCount: 4))
       ..onComplete = () {
         hitByEnemy = false;
       });

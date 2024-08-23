@@ -11,7 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
   flame: ^1.18.0
+  shared_preferences: ^2.3.2
 
 flutter:
   assets:
     - assets/images/
+  fonts:
+    - family: PPGatwick
+      fonts:
+        - asset: fonts/PPGatwick-Ultralight.woff
+        - asset: fonts/PPGatwick-Bold.woff
+          weight: 700

@@ -10,7 +10,7 @@ class Vial extends SpriteComponent with HasGameReference<CamparatGame> {
   final Vector2 velocity = Vector2.zero();
 
   Vial({required this.gridPosition, required this.xOffset})
-      : super(size: Vector2.all(64), anchor: Anchor.center);
+      : super(size: Vector2.all( 64), anchor: Anchor.bottomLeft);
 
   @override
   Future<void> onLoad() async {
@@ -28,7 +28,7 @@ class Vial extends SpriteComponent with HasGameReference<CamparatGame> {
   void update(double dt) {
     velocity.x = game.objectSpeed;
     position += velocity * dt;
-    if (position.x < -size.x) {
+    if (position.x < -size.x || game.health <= 0) {
       removeFromParent();
     }
 

@@ -1,7 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../camparat_game.dart';
 
@@ -24,20 +24,21 @@ class Cap extends SpriteComponent with HasGameReference<CamparatGame> {
       game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
-    add(SizeEffect.by(
-        Vector2.all(24),
-        EffectController(
-            duration: .75,
-            reverseDuration: .5,
-            infinite: true,
-            curve: Curves.easeOut)));
+    add(RotateEffect.by(
+      2 * 3.14159,
+      EffectController(
+        duration: 2,
+        infinite: true,
+        curve: Curves.linear,
+      ),
+    ));
   }
 
   @override
   void update(double dt) {
     velocity.x = game.objectSpeed;
     position += velocity * dt;
-    if (position.x < -size.x) {
+    if (position.x < -size.x || game.health <= 0) {
       removeFromParent();
     }
 

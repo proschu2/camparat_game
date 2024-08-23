@@ -1,13 +1,14 @@
-import '../camparat_game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+
+import '../camparat_game.dart';
 
 class PlatformBlock extends SpriteComponent
     with HasGameReference<CamparatGame> {
   final Vector2 gridPosition;
-  final Vector2 velocity = Vector2.zero();
-
   double xOffset;
+
+  final Vector2 velocity = Vector2.zero();
 
   PlatformBlock({
     required this.gridPosition,
@@ -15,7 +16,7 @@ class PlatformBlock extends SpriteComponent
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  void onLoad() {
+  void onLoad() async {
     sprite = Sprite(game.bricks);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset,
@@ -28,7 +29,7 @@ class PlatformBlock extends SpriteComponent
   void update(double dt) {
     velocity.x = game.objectSpeed;
     position += velocity * dt;
-    if (position.x < -size.x) removeFromParent();
+    if (position.x < -size.x || game.health <= 0) removeFromParent();
 
     super.update(dt);
   }
